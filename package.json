@@ -1,0 +1,25 @@
+{
+  "name": "nyt-archive-data",
+  "version": "0.0.1",
+  "description": "Script to access data from NYT Archive API.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattmakesmaps/nyt-archive-data.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mattmakesmaps/nyt-archive-data/issues"
+  },
+  "homepage": "https://github.com/mattmakesmaps/nyt-archive-data#readme",
+  "dependencies": {
+    "promise-ratelimit": "0.0.3",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
+    "util-promisify": "^2.0.0"
+  }
+}
