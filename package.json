@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/mattmakesmaps/nyt-archive-data#readme",
   "dependencies": {
+    "bottleneck": "^1.16.0",
+    "jsonfile": "^3.0.0",
     "promise-ratelimit": "0.0.3",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
