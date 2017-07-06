@@ -10,7 +10,8 @@ const fs = require('fs');
 
 Promise.longStackTraces();
 // This stuff could be wrapped in a cmd-line param or class config
-const base_url = 'http://api.nytimes.com/svc/archive/v1'
+// const base_url = 'http://api.nytimes.com/svc/archive/v1'
+const base_url = 'http://localhost:53821/svc/archive/v1'
 const api_key = '772925f7d490445fa8a6b1be09ec262a'
 const months = [1, 2];
 const year = 1985;
