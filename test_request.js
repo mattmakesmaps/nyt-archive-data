@@ -24,21 +24,20 @@ function makeRequest(options) {
 // Function that:
 // - Makes a request
 // - then checks if the response is valid json
-// - if not, throw an error
+// - retry if response is not valid json 
     return rp(options)
     .then((response) => {
         // Change to === 'number' to force an error
-        if (typeof(response) === 'number') {
+        if (typeof(response) === 'object') {
             console.log('Reponse contained valid JSON');
             return response;
         } else {
-            console.log('in rp.then() error');
-            throw "this is the error";
+            console.log('request failed, retrying');
+            makeRequest(options);
         }
     })
     // This will catch an error `thrown` in the `then` above.
     .catch((error) => {
-        // Place this request back into the queue.
         console.log('in the rp.catch() error');
         throw error;
     });
@@ -54,9 +53,3 @@ let response = makeRequest(request_params)
         console.log('in the makeRequest.catch() error');
         console.log(error);
     })
-
-// This prints:
-// in rp.then() error
-// in the rp.catch() error
-// in the makeRequest.catch() error
-// this is the error

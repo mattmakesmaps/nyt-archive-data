@@ -1,3 +1,9 @@
+# VSCODE
+.vscode/*
+
+# data
+data-by-year/*
+
 # Logs
 logs
 *.log
