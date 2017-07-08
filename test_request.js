@@ -1,5 +1,6 @@
-const rp = require('request-promise');
 const util = require('util');
+const request = require('request');
+const promiseRetry = require('promise-retry');
 
 const base_url = 'http://localhost:53821/svc/archive/v1'
 const api_key = '772925f7d490445fa8a6b1be09ec262a'
@@ -21,31 +22,28 @@ function makeRequestOptionsObj(base_url, year, month, api_key) {
 }
 
 function makeRequest(options) {
-// Function that:
-// - Makes a request
-// - then checks if the response is valid json
-// - retry if response is not valid json 
-    return rp(options)
-    .then((response) => {
-        // Change to === 'number' to force an error
-        if (typeof(response) === 'object') {
-            console.log('Reponse contained valid JSON');
-            return response;
-        } else {
-            console.log('request failed, retrying');
-            makeRequest(options);
-        }
-    })
-    // This will catch an error `thrown` in the `then` above.
-    .catch((error) => {
-        console.log('in the rp.catch() error');
-        throw error;
+    // Returns request wrapped in Promise
+    return new Promise((resolve, reject) => {
+        request.get(options, (error, response, body) => {
+            if (error || typeof (body) !== 'object') {
+                console.log(options.uri + ' request failed, throwing error');
+                reject(error);
+            }
+            resolve(body);
+        })
+    });
+}
+
+function makeRetryRequest(options) {
+    // Returns makeRequest Promise wrapped in Retry Promise
+    return promiseRetry(function(retry) {
+        return makeRequest(options).catch(retry);
     });
 }
 
 let request_params = makeRequestOptionsObj(base_url, 1985, 1, api_key);
 
-let response = makeRequest(request_params)
+let response = makeRetryRequest(request_params)
     .then((value) => {
         console.log('Chained response');
     })
@@ -53,3 +51,6 @@ let response = makeRequest(request_params)
         console.log('in the makeRequest.catch() error');
         console.log(error);
     })
+
+// A pending promise
+console.log(response);
