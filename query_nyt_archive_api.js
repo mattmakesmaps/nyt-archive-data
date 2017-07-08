@@ -55,17 +55,15 @@ function queryYearOfData(year, api_key) {
 
     return Promise.all(request_options.map(makeThrottledRequest))
     .then((resolved_responses) => {
-        return new Promise((resolve, reject) => {
-            console.log('Promise.all() Has resolved.');
-            console.log(resolved_responses.length);
-            let merged_docs = [];
-            resolved_responses.forEach(response => {
-                response['response']['docs'].forEach(doc => {
-                    merged_docs.push(doc);
-                });
+        console.log('Promise.all() Has resolved.');
+        console.log(resolved_responses.length);
+        let merged_docs = [];
+        resolved_responses.forEach(response => {
+            response['response']['docs'].forEach(doc => {
+                merged_docs.push(doc);
             });
-            resolve(merged_docs);
         });
+        return(merged_docs);
     })
     .catch((error) => console.log(error));
 }
