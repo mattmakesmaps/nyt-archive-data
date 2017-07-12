@@ -1,4 +1,4 @@
-const query_nyt = require('./query_nyt_archive_api.js');
+const query_nyt = require('./lib/query_nyt_archive_api.js');
 const jsonfile = require('jsonfile');
 const util = require('util');
 const api_key = '772925f7d490445fa8a6b1be09ec262a';
