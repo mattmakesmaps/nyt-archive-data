@@ -2,7 +2,6 @@ const expect = require('chai').expect;
 const nock = require('nock');
 const query_nyt = require('../lib/query_nyt_archive_api.js');
 
-// TODO: Add in nock mock
 describe('GET NYT Docs', function () {
     beforeEach(function () {
         // Ripped from API Docs: https://developer.nytimes.com/archive_api.json
@@ -67,7 +66,7 @@ describe('GET NYT Docs', function () {
         };
 
         nock('http://api.nytimes.com/svc/archive/v1')
-            .persist()
+            .persist() // allows nock "interceptor" to be reused.
             .get(/\/1985\/\d+.json/) //match any number, including nonsensical months
             .query({ 'api-key': 1234 })
             .reply(200, apiResponse);
