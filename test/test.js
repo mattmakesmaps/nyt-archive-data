@@ -2,6 +2,35 @@ const expect = require('chai').expect;
 const nock = require('nock');
 const query_nyt = require('../lib/query_nyt_archive_api.js');
 
+describe('Retry Conditions', function () {
+    beforeEach(function() {
+        let apiSuccessResponse = { "response": { "docs": [{ "test_key": "test_value" }] } };
+    });
+
+    afterEach(function () {
+        nock.cleanAll();
+    });
+
+    it('Should Retry after a 429 HTTP Response.', function () {
+        let apiRateExceededResponse = {"message":"API rate limit exceeded"};
+
+        // You can chain multiple gets to create different interceptors for the same URL
+        nock('http://api.nytimes.com/svc/archive/v1')
+            .get(/\/1985\/\d+.json/) //match any number, including nonsensical months
+            .query({ 'api-key': 1234 })
+            .reply(429, apiRateExceededResponse)
+            .get(/\/1985\/\d+.json/) //match any number, including nonsensical months
+            .query({ 'api-key': 1234 })
+            .reply(200, apiSuccessResponse);
+
+        return query_nyt('1234', 1985, [10]).then((data) => {
+            // Check if response is an object
+            expect(data).to.be.an('object');
+            expect(data['docs']).to.have.lengthOf(1);
+        })
+    });
+})
+
 describe('GET NYT Docs', function () {
     beforeEach(function () {
         // Ripped from API Docs: https://developer.nytimes.com/archive_api.json
@@ -71,8 +100,8 @@ describe('GET NYT Docs', function () {
             .query({ 'api-key': 1234 })
             .reply(200, apiResponse);
     });
-    
-    afterEach(function() {
+
+    afterEach(function () {
         // reset nocks
         nock.cleanAll();
     });
