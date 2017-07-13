@@ -3,15 +3,12 @@ const nock = require('nock');
 const query_nyt = require('../lib/query_nyt_archive_api.js');
 
 describe('Retry Conditions', function () {
-    beforeEach(function() {
-        let apiSuccessResponse = { "response": { "docs": [{ "test_key": "test_value" }] } };
-    });
-
     afterEach(function () {
         nock.cleanAll();
     });
 
     it('Should Retry after a 429 HTTP Response.', function () {
+        let apiSuccessResponse = { "response": { "docs": [{ "test_key": "test_value" }] } };
         let apiRateExceededResponse = {"message":"API rate limit exceeded"};
 
         // You can chain multiple gets to create different interceptors for the same URL
